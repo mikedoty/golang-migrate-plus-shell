@@ -243,7 +243,12 @@ func listProfiles(t *term.Terminal, chInterrupt chan<- os.Signal) (*Profile, err
 				panic(err)
 			}
 		}
-		return nil, io.EOF
+
+		if profile == nil {
+			return nil, io.EOF
+		} else {
+			return profile, nil
+		}
 	} else if choice == "-2" {
 		chInterrupt <- os.Kill
 		return nil, io.EOF
@@ -301,6 +306,8 @@ func createProfile(t *term.Terminal, chInterrupt chan<- os.Signal) *Profile {
 	newline()
 	print("Enter the database connection string that will be sent to the migrate tool.")
 	newline()
+	print("Profiles are saved in the profiles.json folder alongside the compiled app.  You may prefer to enter throwaway values on the CLI and edit the json file directly afterward.")
+	newline()
 	print("Example: postgres://postgres:postgres@localhost:5433/alpha?sslmode=disable&x-migrations-history-enabled=true")
 	newline()
 
@@ -313,6 +320,7 @@ func createProfile(t *term.Terminal, chInterrupt chan<- os.Signal) *Profile {
 		} else if strings.TrimSpace(connStr) == "" {
 			newline()
 			print("Connection String is required.")
+			newline()
 		} else {
 			profile.ConnectionString = connStr
 			break
@@ -437,10 +445,6 @@ func doStuff(t *term.Terminal, chInterrupt chan<- os.Signal) error {
 
 	newline()
 
-	chStopApplyFake := drawSpinner(fmt.Sprintf("applying missing version %d...", 123))
-	time.Sleep(500 * time.Millisecond)
-	chStopApplyFake <- true
-
 	xx := 5
 	if xx > 0 {
 		missingVersions = []int{20240830112233, 20240830112234}
@@ -450,8 +454,6 @@ func doStuff(t *term.Terminal, chInterrupt chan<- os.Signal) error {
 		printSuccess("No missing versions found")
 		newline()
 	} else {
-		newline()
-
 		print(fmt.Sprintf("Found %d missing migration(s).", len(missingVersions)))
 		newline()
 		print("You can attempt to apply these retroactively right now, or you can manually copy and paste them separately.")
@@ -481,13 +483,14 @@ func doStuff(t *term.Terminal, chInterrupt chan<- os.Signal) error {
 				}
 
 				applyMissingErr := mp.Steps(1)
-				// time.Sleep(2 * time.Second)
 
 				err = mp.Force(int(curVersion))
 				if err != nil {
 					return err
 				}
 
+				// This is just here to allow user to admire
+				// the "spinner" effect during super-fast migrations
 				time.Sleep(250 * time.Millisecond)
 
 				chStopApplyMissingVersion <- (applyMissingErr == nil)
