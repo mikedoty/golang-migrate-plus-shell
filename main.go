@@ -18,6 +18,7 @@ import (
 
 	migrateplus "github.com/mikedoty/golang-migrate-plus"
 
+	_ "github.com/mikedoty/golang-migrate-plus/database/mysql"
 	_ "github.com/mikedoty/golang-migrate-plus/database/postgres"
 	_ "github.com/mikedoty/golang-migrate-plus/source/file"
 
@@ -430,13 +431,13 @@ func doStuff(t *term.Terminal, chInterrupt chan<- os.Signal) error {
 		return err
 	}
 
-	chStopCheckMissing := drawSpinner("Checking for missing migrations...")
+	chStopCheckMissing := drawSpinner("checking for missing migrations...")
 	missingVersions := getMissingVersions(profile, appliedVersions)
 	chStopCheckMissing <- true
 
 	newline()
 
-	chStopApplyFake := drawSpinner(fmt.Sprintf("Applying missing version %d", 123))
+	chStopApplyFake := drawSpinner(fmt.Sprintf("applying missing version %d...", 123))
 	time.Sleep(500 * time.Millisecond)
 	chStopApplyFake <- true
 
@@ -460,7 +461,7 @@ func doStuff(t *term.Terminal, chInterrupt chan<- os.Signal) error {
 		if resp == "Yes" {
 			newline()
 			for _, version := range missingVersions {
-				chStopApplyMissingVersion := drawSpinner(fmt.Sprintf("Applying missing version %d", version))
+				chStopApplyMissingVersion := drawSpinner(fmt.Sprintf("applying missing version %d...", version))
 
 				curVersion, _, err := mp.Version()
 				if err != nil {
@@ -503,7 +504,7 @@ func doStuff(t *term.Terminal, chInterrupt chan<- os.Signal) error {
 		}
 	}
 
-	chStopMigrateUp := drawSpinner("Applying migrations...")
+	chStopMigrateUp := drawSpinner("applying migrations...")
 	err = mp.Up()
 	time.Sleep(1 * time.Second)
 	chStopMigrateUp <- (err == nil || err == migrateplus.ErrNoChange)
