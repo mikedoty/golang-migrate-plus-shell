@@ -28,6 +28,8 @@ import (
 	"github.com/buger/goterm"
 )
 
+const APP = "golang-migrate-plus-shell"
+
 func newline() {
 	fmt.Print("\r\n")
 }
@@ -73,12 +75,14 @@ type Profile struct {
 }
 
 func getProfiles() ([]Profile, error) {
-	_, err := os.Stat("profiles.json")
+	profilesFile := ensureConfigFileExists()
+	// _, err := os.Stat("profiles.json")
+	_, err := os.Stat(profilesFile)
 	if err != nil {
 		return nil, err
 	}
 
-	jsonBytes, err := os.ReadFile("profiles.json")
+	jsonBytes, err := os.ReadFile(profilesFile)
 	if err != nil {
 		return nil, err
 	}
@@ -143,7 +147,50 @@ func printSuccess(label string) {
 	fmt.Printf(goterm.Color("\u2713", goterm.GREEN) + " " + label + "\r\n")
 }
 
+func ensureConfigFileExists() string {
+	configFolder, err := os.UserConfigDir()
+	if err != nil {
+		panic(err)
+	}
+
+	myConfigFolder := path.Join(configFolder, APP)
+	_, err = os.Stat(myConfigFolder)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			err = os.Mkdir(myConfigFolder, os.ModePerm)
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			panic(err)
+		}
+	}
+
+	profilesFile := path.Join(myConfigFolder, "profiles.json")
+	_, err = os.Stat(profilesFile)
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			err = os.WriteFile("./profiles.json", []byte("[]"), 0644)
+			if err != nil {
+				panic(err)
+			}
+		} else {
+			panic(err)
+		}
+	}
+
+	return profilesFile
+}
+
 func main() {
+	// ss, _ := os.Getwd()
+	// fmt.Println(ss)
+	// return
+
+	// ssss, _ := os.UserConfigDir()
+	// fmt.Println(ssss)
+	// return
+
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Printf("Panic: %+v\r\n", r)
@@ -238,7 +285,9 @@ func listProfiles(t *term.Terminal, chInterrupt chan<- os.Signal) (*Profile, err
 				panic(err)
 			}
 
-			err = os.WriteFile("./profiles.json", jsonBytes, 0644)
+			profilesFile := ensureConfigFileExists()
+			// err = os.WriteFile("./profiles.json", jsonBytes, 0644)
+			err = os.WriteFile(profilesFile, jsonBytes, 0644)
 			if err != nil {
 				panic(err)
 			}
@@ -445,10 +494,10 @@ func doStuff(t *term.Terminal, chInterrupt chan<- os.Signal) error {
 
 	newline()
 
-	xx := 5
-	if xx > 0 {
-		missingVersions = []int{20240830112233, 20240830112234}
-	}
+	// xx := 5
+	// if xx > 0 {
+	// 	missingVersions = []int{20240830112233, 20240830112234}
+	// }
 
 	if len(missingVersions) == 0 {
 		printSuccess("No missing versions found")

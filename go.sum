@@ -28,8 +28,8 @@ github.com/hashicorp/go-multierror v1.1.1 h1:H5DkEtf6CXdFp0N0Em5UCwQpXMWke8IA0+l
 github.com/hashicorp/go-multierror v1.1.1/go.mod h1:iw975J/qwKPdAO1clOe2L8331t/9/fmwbPZ6JB6eMoM=
 github.com/lib/pq v1.10.9 h1:YXG7RB+JIjhP29X+OtkiDnYaXQwpS4JEWq7dtCCRUEw=
 github.com/lib/pq v1.10.9/go.mod h1:AlVN5x4E4T544tWzH6hKfbfQvm3HdbOxrmggDNAPY9o=
-github.com/mikedoty/gocliselect v0.0.0-20241215003436-3c6fb236e1d0 h1:RoxT9lS0Ko6UEKAXJ9VPBgwpTzGut+rhCdA2XBz3hNU=
-github.com/mikedoty/gocliselect v0.0.0-20241215003436-3c6fb236e1d0/go.mod h1:gCOkzYBkjRtUEgPSFSeg0UdyGL7CU/LWuLpjkVxW+BM=
+github.com/mikedoty/gocliselect v0.0.1 h1:vFl7GwAdkD3D9/As5swq378mZKo2yx/OOVRafSkk6uI=
+github.com/mikedoty/gocliselect v0.0.1/go.mod h1:gCOkzYBkjRtUEgPSFSeg0UdyGL7CU/LWuLpjkVxW+BM=
 github.com/mikedoty/golang-migrate-plus v0.9.2 h1:JkOVv33zB6VxBJ9/HEOcp3LkoL8PaNQYeWBVGS4Bkws=
 github.com/mikedoty/golang-migrate-plus v0.9.2/go.mod h1:zAJdOlfSpwxFE4cvGxdGddkkvpjW7egsZgr6eQa4+74=
 github.com/moby/term v0.5.0 h1:xt8Q1nalod/v7BqbG21f8mQPqH+xAaC9C3N3wfWbVP0=
