@@ -5,7 +5,7 @@ go 1.21.0
 require (
 	github.com/buger/goterm v1.0.4
 	github.com/mikedoty/gocliselect v0.0.1
-	github.com/mikedoty/golang-migrate-plus v0.9.2
+	github.com/mikedoty/golang-migrate-plus v0.9.3
 	golang.org/x/exp v0.0.0-20230315142452-642cacee5cc0
 	golang.org/x/term v0.27.0
 )
