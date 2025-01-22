@@ -20,6 +20,7 @@ import (
 
 	_ "github.com/mikedoty/golang-migrate-plus/database/mysql"
 	_ "github.com/mikedoty/golang-migrate-plus/database/postgres"
+	_ "github.com/mikedoty/golang-migrate-plus/database/singlestore"
 	_ "github.com/mikedoty/golang-migrate-plus/source/file"
 
 	"golang.org/x/exp/slices"
